@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        /* Styling for clean UI */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        
+        .container {
+            background: white;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #555; }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea { resize: none; height: 80px; }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Registration Form</h2>
+        <form id="userForm">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="name" placeholder="Enter Name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="phone" placeholder="Enter Phone" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="Enter Email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Address</label>
+                <textarea id="address" placeholder="Enter Address" required></textarea>
+            </div>
+
+            <button type="submit">Save Data</button>
+        </form>
+    </div>
+
+    <script>
+        // Form element ko select karna
+        const form = document.getElementById('userForm');
+
+        // Jab form submit ho tab ye function chalega
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Page reload hone se rokna
+
+            // 1. Input boxes se value nikalna
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
+
+            // 2. Data ka object banana
+            const userData = {
+                name: name,
+                phone: phone,
+                email: email,
+                address: address
+            };
+
+            // 3. Fetch API se Server (db.json) par bhejna
+            fetch('http://localhost:3000/users', {
+                method: 'POST', // Data save karne ke liye POST method
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData) // Object ko string mein convert karna
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Data Successfully Saved!"); // Success message
+                form.reset(); // Form khali kar dena
+                console.log("Saved Data:", data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Error! Kya JSON Server chal raha hai?");
+            });
+        });
+    </script>
+
+</body>
+</html>
