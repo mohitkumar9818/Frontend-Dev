@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Q6 – Event Subscription Panel</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    body { font-family: Arial; background:#f7f7fb; margin:20px; }
+    .panel { max-width: 600px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    h2 { margin-top:0; }
+    ul { list-style:none; padding:0; }
+    li { padding:10px; margin:6px 0; background:#f0f0f0; border-radius:6px; display:flex; justify-content:space-between; align-items:center; }
+    button { padding:6px 10px; border-radius:6px; cursor:pointer; border:1px solid #ccc; background:#fff; }
+    .success { padding:10px; margin-top:15px; background:#e3ffe3; border-left:4px solid #00b300; display:none; border-radius:6px; }
+    .subscribed { background:#d9efff !important; border-left:4px solid #3399ff; }
+    .controls { margin-top:12px; display:flex; gap:10px; }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h2>Event Subscription Panel</h2>
+
+    <ul id="topics-list">
+      <li data-topic="News">News <div><button class="subscribe-btn">Subscribe</button> <button class="remove-btn">Remove</button></div></li>
+      <li data-topic="Sports">Sports <div><button class="subscribe-btn">Subscribe</button> <button class="remove-btn">Remove</button></div></li>
+      <li data-topic="Tech">Tech <div><button class="subscribe-btn">Subscribe</button> <button class="remove-btn">Remove</button></div></li>
+    </ul>
+
+    <div class="controls">
+      <input type="text" id="new-topic" placeholder="Add new topic..." />
+      <button id="add-topic-btn">Add Topic</button>
+    </div>
+
+    <div id="message" class="success"></div>
+  </div>
+
+<script>
+$(function(){
+
+  function showMessage(text){
+    $('#message').text(text).fadeIn(150).delay(900).fadeOut(300);
+  }
+
+  $(document).on('click', '.subscribe-btn', function(){
+    let li = $(this).closest('li');
+    li.addClass('subscribed');
+    $(this).text('Unsubscribe').removeClass('subscribe-btn').addClass('unsubscribe-btn');
+    showMessage('Subscribed to ' + li.data('topic'));
+  });
+
+  $(document).on('click', '.unsubscribe-btn', function(){
+    let li = $(this).closest('li');
+    li.removeClass('subscribed');
+    $(this).text('Subscribe').removeClass('unsubscribe-btn').addClass('subscribe-btn');
+    showMessage('Unsubscribed from ' + li.data('topic'));
+  });
+
+  $('#add-topic-btn').on('click', function(){
+    let newTopic = $('#new-topic').val().trim();
+    if(newTopic === '') return;
+
+    $('#topics-list').append(`
+      <li data-topic="${newTopic}">
+        ${newTopic}
+        <div>
+          <button class="subscribe-btn">Subscribe</button>
+          <button class="remove-btn">Remove</button>
+        </div>
+      </li>
+    `);
+
+    $('#new-topic').val('');
+    showMessage('Topic "' + newTopic + '" added');
+  });
+
+  $(document).on('click', '.remove-btn', function(){
+    let li = $(this).closest('li');
+    let topic = li.data('topic');
+    li.off();
+    li.remove();
+
+    showMessage('Removed topic: ' + topic);
+  });
+
+});
+</script>
+
+</body>
+</html>

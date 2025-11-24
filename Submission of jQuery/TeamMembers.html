@@ -1,0 +1,183 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Q5 - Team Members Directory</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-VvY8G3Q6vX+K4k6r2kFq/0M2w3kz5X2b2b2qk5Y9/tE=" crossorigin="anonymous"></script>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:20px;background:#f7f7fb}
+    .directory{max-width:900px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between}
+    .department{border-radius:8px;background:#fff;padding:12px;margin:12px 0;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+    .dept-header{display:flex;align-items:center;gap:12px}
+    .dept-header h2{margin:0;font-size:1.1rem}
+    ul.team{list-style:none;padding-left:18px;margin:8px 0}
+    li.member{margin:6px 0;padding:6px;border-radius:6px}
+    .manager{font-weight:700;cursor:pointer}
+    .employee{cursor:default}
+    .contact{display:none;margin-left:8px;font-size:0.95rem}
+    .highlight{background:linear-gradient(90deg,#fff7d6,#fff);box-shadow:0 0 0 2px rgba(255,200,0,0.12)}
+    .dept-selected{background:linear-gradient(90deg,#e8f5ff,#fff)}
+    .controls{display:flex;gap:8px}
+    button{padding:8px 12px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="directory">
+    <header>
+      <h1>Team Members Directory</h1>
+      <div class="controls">
+        <button id="pick-random">Select Random Employee</button>
+        <button id="clear-highlights">Clear Highlights</button>
+      </div>
+    </header>
+
+    <!-- Department: Engineering -->
+    <section class="department" data-dept="Engineering">
+      <div class="dept-header">
+        <h2>Engineering</h2>
+        <button class="toggle-team">Collapse/Expand</button>
+        <button class="select-dept">Select Department</button>
+      </div>
+
+      <article class="team-wrapper">
+        <ul class="team" aria-label="Engineering team">
+          <li class="member manager">Alice (Engineering Manager)
+            <!-- direct reports nested as a child <ul> -->
+            <ul>
+              <li class="member">
+                <span class="employee">Bob</span>
+                <div class="contact">Email: bob@example.com | Ext: 101</div>
+              </li>
+              <li class="member">
+                <span class="employee">Carol</span>
+                <div class="contact">Email: carol@example.com | Ext: 102</div>
+              </li>
+              <li class="member">
+                <span class="employee">Dave</span>
+                <div class="contact">Email: dave@example.com | Ext: 103</div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- Department: Product -->
+    <section class="department" data-dept="Product">
+      <div class="dept-header">
+        <h2>Product</h2>
+        <button class="toggle-team">Collapse/Expand</button>
+        <button class="select-dept">Select Department</button>
+      </div>
+
+      <article class="team-wrapper">
+        <ul class="team" aria-label="Product team">
+          <li class="member manager">Eve (Product Manager)
+            <ul>
+              <li class="member">
+                <span class="employee">Frank</span>
+                <div class="contact">Email: frank@example.com | Ext: 201</div>
+              </li>
+              <li class="member">
+                <span class="employee">Grace</span>
+                <div class="contact">Email: grace@example.com | Ext: 202</div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- Department: Design -->
+    <section class="department" data-dept="Design">
+      <div class="dept-header">
+        <h2>Design</h2>
+        <button class="toggle-team">Collapse/Expand</button>
+        <button class="select-dept">Select Department</button>
+      </div>
+
+      <article class="team-wrapper">
+        <ul class="team" aria-label="Design team">
+          <li class="member manager">Heidi (Design Lead)
+            <ul>
+              <li class="member">
+                <span class="employee">Ivan</span>
+                <div class="contact">Email: ivan@example.com | Ext: 301</div>
+              </li>
+              <li class="member">
+                <span class="employee">Judy</span>
+                <div class="contact">Email: judy@example.com | Ext: 302</div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+    </section>
+
+    <p style="font-size:0.95rem;color:#666">Tip: Click a manager to highlight direct reports. Hover an employee name to show contact info (uses <code>.next()</code>). Use buttons to test other behaviours.</p>
+  </div>
+
+  <script>
+  $(function(){
+    $('.manager').on('click', function(e){
+      e.stopPropagation(); 
+      $('.member').removeClass('highlight');
+
+      var directReports = $(this).children('ul').children('.member');
+      directReports.addClass('highlight');
+    });
+    $('.employee').hover(
+      function(){
+        $(this).next('.contact').stop(true,true).slideDown(120);
+      },
+      function(){
+        $(this).next('.contact').stop(true,true).slideUp(120);
+      }
+    );
+
+    $('.select-dept').on('click', function(e){
+      e.stopPropagation();
+      $('.department').removeClass('dept-selected');
+      var deptSection = $(this).closest('.department');
+      deptSection.addClass('dept-selected');
+      deptSection.find('.team-wrapper').children().find('.member').addClass('highlight');
+    });
+    $('#pick-random').on('click', function(){
+      $('.member').removeClass('highlight');
+      var allEmployees = $('.employee');
+      var randomIndex = Math.floor(Math.random() * allEmployees.length);
+      var chosen = allEmployees.eq(randomIndex);
+      var chosenLi = chosen.closest('li.member');
+      chosenLi.addClass('highlight');
+      chosenLi.siblings('.member').addClass('highlight');
+
+      chosenLi.fadeOut(60).fadeIn(60);
+    });
+
+    $('#clear-highlights').on('click', function(){
+      $('.member').removeClass('highlight');
+      $('.department').removeClass('dept-selected');
+    });
+    $('.toggle-team').on('click', function(e){
+      e.stopPropagation();
+      var dept = $(this).closest('.department');
+      dept.find('ul.team').first().slideToggle(180);
+      var parentArticle = $(this).parent();
+      parentArticle.toggleClass('collapsed');
+    });
+    $('.department').on('click', function(){
+      $(this).toggleClass('dept-selected');
+      $(this).children('.team-wrapper').children().find('.member').toggleClass('highlight');
+    });
+
+    $('.member').on('click', function(e){
+      e.stopPropagation();
+    });
+
+  });
+  </script>
+</body>
+</html>

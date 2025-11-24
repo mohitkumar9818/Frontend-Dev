@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Q2 - Product Highlight</title>
+<style>
+.highlight { background: #fffbcc; }
+.selected { border: 2px solid #ff6b6b; }
+.discount { box-shadow: 0 0 6px rgba(0,0,0,0.1); }
+.out { opacity: .5; }
+</style>
+</head>
+<body>
+<main>
+<section id="products">
+<article class="product" data-stock="in" data-price="120" data-discount="10">
+<h3 class="p-title">Product A</h3>
+<p class="price">$120</p>
+<p class="details">Short details A</p>
+<button class="fav">❤</button>
+</article>
+
+
+<article class="product" data-stock="out" data-price="80">
+<h3 class="p-title">Product B</h3>
+<p class="price">$80</p>
+<p class="details">Short details B</p>
+<button class="fav">❤</button>
+</article>
+
+
+<article class="product" data-stock="in" data-price="200" data-discount="25">
+<h3 class="p-title">Product C</h3>
+<p class="price">$200</p>
+<p class="details">Short details C</p>
+<button class="fav">❤</button>
+</article>
+
+
+<article class="product" data-stock="in" data-price="45">
+<h3 class="p-title">Product D</h3>
+<p class="price">$45</p>
+<p class="details">Short details D</p>
+<button class="fav">❤</button>
+</article>
+
+
+<article class="product" data-stock="out" data-price="99" data-discount="5">
+<h3 class="p-title">Product E</h3>
+<p class="price">$99</p>
+<p class="details">Short details E</p>
+<button class="fav">❤</button>
+</article>
+</section>
+</main>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="ProductHighlight.js"></script>
+</body>
+</html>
