@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Q9 – Multi-Step Form</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    body { font-family: Arial; background:#f7f7fb; margin:20px; }
+    .container { max-width:600px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}    
+    .step { display:none; }
+    .step.active { display:block; }
+    input { width:100%; padding:10px; margin:10px 0; }
+    button { padding:8px 14px; margin:5px; border-radius:6px; cursor:pointer; border:1px solid #ccc; background:#fff; }
+    #summary { background:#e8f9e8; padding:15px; border-left:4px solid #00b000; margin-top:15px; border-radius:6px; display:none; }
+    .error { color:#d00000; font-size:0.9rem; display:none; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Multi-Step Form</h2>
+  <div class="step active" id="step1">
+    <h3>Step 1: Enter Name</h3>
+    <input type="text" id="name" placeholder="Your Name" />
+    <div class="error" id="name-error">Name cannot be empty</div>
+    <button id="next1">Next</button>
+  </div>
+  <div class="step" id="step2">
+    <h3>Step 2: Enter Email</h3>
+    <input type="text" id="email" placeholder="Your Email" />
+    <div class="error" id="email-error">Enter valid email</div>
+    <button id="back2">Back</button>
+    <button id="next2">Next</button>
+  </div>
+  <div class="step" id="step3">
+    <h3>Step 3: Enter Password</h3>
+    <input type="password" id="password" placeholder="Your Password" />
+    <div class="error" id="password-error">Password must be at least 6 characters</div>
+    <button id="back3">Back</button>
+    <button id="finish">Finish</button>
+  </div>
+  <div id="summary"></div>
+</div>
+
+<script>
+$(function(){
+
+  function showStep(step){
+    $('.step').removeClass('active');
+    $('#'+step).addClass('active');
+  }
+  function validateName(){
+    let val = $('#name').val().trim();
+    if(val === ""){ $('#name-error').show(); return false; }
+    $('#name-error').hide(); return true;
+  }
+
+  function validateEmail(){
+    let email = $('#email').val().trim();
+    let pattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    if(!pattern.test(email)){ $('#email-error').show(); return false; }
+    $('#email-error').hide(); return true;
+  }
+
+  function validatePassword(){
+    let pass = $('#password').val().trim();
+    if(pass.length < 6){ $('#password-error').show(); return false; }
+    $('#password-error').hide(); return true;
+  }
+  $('#next1').on('click', function(){ if(validateName()) showStep('step2'); });
+  $('#back2').on('click', function(){ showStep('step1'); });
+
+  $('#next2').on('click', function(){ if(validateEmail()) showStep('step3'); });
+  $('#back3').on('click', function(){ showStep('step2'); });
+  $('#finish').on('click', function(){
+    if(!validatePassword()) return;
+
+    let name = $('#name').val().trim();
+    let email = $('#email').val().trim();
+    let pass = $('#password').val().trim();
+
+    $('#summary').html(`
+      <h3>Form Summary</h3>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Password:</strong> ${pass}</p>
+    `).slideDown();
+
+    showStep('step1');
+    $('#name, #email, #password').val('');
+  });
+
+});
+</script>
+
+</body>
+</html>

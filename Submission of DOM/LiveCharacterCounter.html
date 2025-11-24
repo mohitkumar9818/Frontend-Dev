@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Q8 – Live Character Counter</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    body { font-family: Arial; background:#f7f7fb; margin:20px; }
+    .box { max-width:600px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}    
+    textarea { width:100%; height:120px; padding:10px; font-size:1rem; }
+    #counter { margin-top:10px; font-size:1rem; font-weight:bold; }
+    .normal { color:#333; }
+    .warn { color:#d4b000; }
+    .danger { color:#d00000; }
+    button { padding:8px 12px; margin-top:12px; border-radius:6px; cursor:pointer; border:1px solid #ccc; background:#fff; }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Live Character Counter</h2>
+
+  <textarea id="text"></textarea>
+  <div id="counter" class="normal">100 characters remaining</div>
+  <button id="reset">Reset</button>
+</div>
+
+<script>
+$(function(){
+
+  const MAX = 100;
+
+  $('#text').on('keydown', function(e){
+    let text = $(this).val();
+    if(text.length >= MAX && ![8,46,37,38,39,40].includes(e.keyCode)){
+      e.preventDefault();
+    }
+  });
+  $('#text').on('input', function(){
+    let len = $(this).val().length;
+    let remaining = MAX - len;
+
+    let counter = $('#counter');
+    counter.text(remaining + " characters remaining");
+    counter.removeClass('normal warn danger');
+
+    if(remaining <= 0){
+      counter.addClass('danger');
+    }
+    else if(remaining <= 20){
+      counter.addClass('warn');
+    }
+    else{
+      counter.addClass('normal');
+    }
+  });
+  $('#reset').on('click', function(){
+    $('#text').val('');
+    $('#counter').text('100 characters remaining').removeClass('warn danger').addClass('normal');
+  });
+
+});
+</script>
+
+</body>
+</html>

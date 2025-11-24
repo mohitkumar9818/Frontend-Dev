@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mouse Path & Coordinates Logger</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;background:#f7f7fb;padding:24px}
+    .container{max-width:760px;margin:0 auto}
+    .box{width:400px;height:400px;border:2px dashed #888;background:#fff;position:relative;overflow:hidden}
+    .coords{margin-top:12px;font-weight:600}
+    .log{margin-top:8px;height:120px;overflow:auto;background:#fff;border:1px solid #ddd;padding:8px;border-radius:6px}
+    .dot{width:10px;height:10px;border-radius:50%;background:#d00;position:absolute;transform:translate(-50%,-50%)}
+    .controls{margin-top:10px}
+    button{padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:#fff;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Mouse Path & Coordinates Logger</h2>
+    <p>Move your mouse inside the 400×400 box — coordinates update live. Double-click to drop a red dot.</p>
+
+    <div class="box" id="trackBox"></div>
+
+    <div class="coords">Live clientX: <span id="cx">-</span> &nbsp; clientY: <span id="cy">-</span></div>
+
+    <div class="controls">
+      <button id="clearDots">Clear Dots</button>
+      <button id="clearLog">Clear Log</button>
+    </div>
+
+    <div class="log" id="logArea"></div>
+  </div>
+
+<script>
+$(function(){
+  const box = $('#trackBox');
+  const log = $('#logArea');
+  const cxSpan = $('#cx');
+  const cySpan = $('#cy');
+  box.on('mousemove', function(e){
+    cxSpan.text(e.clientX);
+    cySpan.text(e.clientY);
+    const now = Date.now();
+    if(!box.data('lastLog') || now - box.data('lastLog') > 50){
+      box.data('lastLog', now);
+      const relX = Math.round(e.clientX - box.offset().left);
+      const relY = Math.round(e.clientY - box.offset().top);
+      const entry = $('<div>').text(`rel: (${relX}, ${relY}) — client: (${e.clientX}, ${e.clientY})`);
+      log.prepend(entry);
+      if(log.children().length > 200) log.children().slice(200).remove();
+    }
+  });
+  box.on('dblclick', function(e){
+    const relX = e.clientX - box.offset().left;
+    const relY = e.clientY - box.offset().top;
+
+    const dot = $('<div class="dot">');
+    dot.css({ left: relX + 'px', top: relY + 'px' });
+    box.append(dot);
+
+    log.prepend($('<div>').text(`Dropped dot at rel: (${Math.round(relX)}, ${Math.round(relY)})`));
+  });
+
+  $('#clearDots').on('click', function(){
+    box.find('.dot').remove();
+  });
+
+  $('#clearLog').on('click', function(){
+    log.empty();
+    cxSpan.text('-'); cySpan.text('-');
+  });
+
+  });
+</script>
+</body>
+</html>

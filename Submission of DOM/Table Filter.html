@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real-Time Table Filter</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    body { font-family: Arial; background:#f4f7ff; padding:30px; }
+    .box { max-width:700px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}    
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    th, td { padding:12px; border-bottom:1px solid #ccc; text-align:left; }
+    #noResults { display:none; margin-top:10px; font-weight:bold; color:#c00; }
+    input { width:100%; padding:10px; border-radius:6px; border:1px solid #aaa; }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Real-Time Student Search</h2>
+  <input type="text" id="search" placeholder="Search students..." />
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Branch</th>
+        <th>CGPA</th>
+      </tr>
+    </thead>
+    <tbody id="studentTable">
+      <tr><td>Amit Kumar</td><td>CSE</td><td>8.7</td></tr>
+      <tr><td>Sneha Rao</td><td>ECE</td><td>9.1</td></tr>
+      <tr><td>Vikram Singh</td><td>ME</td><td>7.9</td></tr>
+      <tr><td>Priya Sharma</td><td>IT</td><td>8.4</td></tr>
+      <tr><td>Rohit Das</td><td>CSE</td><td>9.0</td></tr>
+    </tbody>
+  </table>
+
+  <div id="noResults">No results found</div>
+</div>
+
+<script>
+$(function(){
+
+  $('#search').on('input', function(){
+    let value = $(this).val().toLowerCase();
+    let hasResult = false;
+
+    $('#studentTable tr').each(function(){
+      let rowText = $(this).text().toLowerCase();
+
+      if(rowText.includes(value)){
+        $(this).show();
+        hasResult = true;
+      } else {
+        $(this).hide();
+      }
+    });
+    if(hasResult){
+      $('#noResults').hide();
+    } else {
+      $('#noResults').show();
+    }
+  });
+
+});
+</script>
+
+</body>
+</html>

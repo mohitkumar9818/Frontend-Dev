@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Q7 – Dynamic Product List Manager</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    body { font-family: Arial; margin:20px; background:#f7f7fb; }
+    .container { max-width:600px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}    
+    ul { list-style:none; padding:0; }
+    li { padding:10px; margin:8px 0; background:#f0f0f0; border-radius:6px; display:flex; justify-content:space-between; align-items:center; }
+    button { padding:6px 10px; border-radius:6px; cursor:pointer; border:1px solid #ccc; background:#fff; }
+    .edit-input { width:70%; padding:6px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Dynamic Product List Manager</h2>
+
+  <input type="text" id="product-input" placeholder="Enter product name" />
+  <button id="add-btn">Add Product</button>
+
+  <ul id="product-list"></ul>
+</div>
+
+<script>
+$(function(){
+  let activeEdit = null; 
+  $('#add-btn').on('click', function(){
+    let name = $('#product-input').val().trim();
+    if(name === '') return;
+
+    $('#product-list').append(`
+      <li>
+        <span class="name">${name}</span>
+        <div>
+          <button class="edit-btn">Edit</button>
+          <button class="delete-btn">Delete</button>
+        </div>
+      </li>
+    `);
+
+    $('#product-input').val('');
+  });
+  $('#product-list').on('click', '.delete-btn', function(){
+    $(this).closest('li').remove();
+  });
+
+  $('#product-list').on('click', '.edit-btn', function(e){
+    e.stopPropagation();
+
+    let li = $(this).closest('li');
+    if(activeEdit && activeEdit[0] !== li[0]){
+      saveEdit(activeEdit);
+    }
+    let span = li.find('.name');
+    let text = span.text();
+    span.replaceWith(`<input class="edit-input" value="${text}">`);
+
+    activeEdit = li;
+  });
+  $(document).on('click', function(e){
+    if(activeEdit && !activeEdit[0].contains(e.target)){
+      saveEdit(activeEdit);
+      activeEdit = null;
+    }
+  });
+  function saveEdit(li){
+    let input = li.find('.edit-input');
+    if(input.length === 0) return;
+
+    let newText = input.val().trim();
+    input.replaceWith(`<span class="name">${newText}</span>`);
+  }
+
+});
+</script>
+
+</body>
+</html>
