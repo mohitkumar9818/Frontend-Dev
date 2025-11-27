@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task Manager</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    .task { padding: 10px; border-bottom: 1px solid #ddd; display:flex; align-items:center; gap:10px; }
+    .title { flex:1; }
+    #filter { margin-bottom: 20px; padding:5px; }
+  </style>
+</head>
+<body>
+
+<h2>Task Manager</h2>
+
+<select id="filter">
+  <option value="">All Tasks</option>
+  <option value="low">Low Priority</option>
+  <option value="medium">Medium Priority</option>
+  <option value="high">High Priority</option>
+  <option value="completed">Completed</option>
+</select>
+
+<div id="taskList"></div>
+
+<script src="Task Manager With Filters.html"></script>
+</body>
+</html>

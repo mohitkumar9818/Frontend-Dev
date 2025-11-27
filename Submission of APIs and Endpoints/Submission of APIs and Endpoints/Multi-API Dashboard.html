@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Multi API Dashboard</title>
+  <style>
+    .box { width: 200px; padding: 20px; border: 1px solid #ccc; margin: 10px; text-align:center; }
+    .row { display: flex; gap: 20px; }
+    .skeleton {
+      height: 25px;
+      background: #eee;
+      border-radius: 5px;
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0% { opacity: .5; }
+      50% { opacity: 1; }
+      100% { opacity: .5; }
+    }
+    #warning { color: red; margin-top: 20px; display:none; }
+  </style>
+</head>
+<body>
+
+<h2>Dashboard</h2>
+
+<div class="row">
+  <div class="box">
+    <h3>Users</h3>
+    <div id="usersCount" class="skeleton"></div>
+  </div>
+  <div class="box">
+    <h3>Orders</h3>
+    <div id="ordersCount" class="skeleton"></div>
+  </div>
+  <div class="box">
+    <h3>Products</h3>
+    <div id="productsCount" class="skeleton"></div>
+  </div>
+</div>
+
+<div id="warning">Some data could not be loaded.</div>
+
+<script src="Multi-API Dashboard.js"></script>
+</body>
+</html>
